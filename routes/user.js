@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const userController = require("../controller/user");
+const auth = require("../middlewares/auth");
 
-router.get("/", async (req, res) => {
-  try {
-    res.status(200).send("user data");
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-});
+router.get("/", auth, userController.getUser);
+router.get("/:id", userController.getUserById);
+router.post("/", userController.addUser);
+router.put("/:id", userController.updateUser);
+router.delete("/:id", userController.deleteUser);
 
 module.exports = router;

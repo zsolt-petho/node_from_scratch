@@ -2,11 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const user = require("./routes/user");
+const auth = require("./routes/authRoute");
 
 mongoose
   .connect("mongodb://localhost/accenture_node", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   .then((res) => {
     console.log("database started successfully");
@@ -18,6 +20,7 @@ mongoose
 app.use(express.json());
 
 app.use("/api/user", user);
+app.use("/api/auth", auth);
 
 app.get("/", function (req, res) {
   res.send("Hello World");

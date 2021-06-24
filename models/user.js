@@ -39,11 +39,27 @@ const validateUser = (user) => {
     email: Joi.string().min(3).max(255).required().email(),
     password: passwordComplexity(complexityOptions),
   });
-  return schema.validate();
-};
 
+  return schema.validate(user);
+};
+const validateUserForCompare = (user) => {
+  const schema = Joi.object({
+    email: Joi.string().min(3).max(255).required().email(),
+    password: passwordComplexity(complexityOptions),
+  });
+
+  return schema.validate(user);
+};
 const userModel = mongoose.model("User", userSchema);
 
-module.exports.userSchema = userSchema;
+/* module.exports.userSchema = userSchema;
 module.exports.validateUser = validateUser;
 module.exports.userModel = userModel;
+module.exports.validateUserForCompare = validateUserForCompare; */
+
+module.exports = {
+  userSchema,
+  validateUser,
+  userModel,
+  validateUserForCompare,
+};
