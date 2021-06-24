@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "joi-password-complexity": "^5.1.0",
     "mongoose": "^5.12.14",
     "nodemon": "^2.0.7"
   }
