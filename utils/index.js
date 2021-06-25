@@ -12,4 +12,6 @@ const complexityOptions = {
 
 const passwordComplexity = passComplexity(complexityOptions);
 
-module.exports = { passwordComplexity };
+module.exports = {
+  passwordComplexity,
+};

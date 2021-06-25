@@ -11,12 +11,12 @@ const getUser = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-//
+
 const getUserById = async (req, res) => {
   try {
   } catch (error) {}
 };
-//
+
 const addUser = async (req, res) => {
   try {
     const { body } = req;
@@ -35,17 +35,17 @@ const addUser = async (req, res) => {
 
     const { password, ...resData } = user.toObject();
 
-    res.status(201).send({ resData });
+    res.status(201).send(resData);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
 };
-//
+
 const updateUser = async (req, res) => {
   try {
   } catch (error) {}
 };
-//
+
 const changePassword = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -64,18 +64,32 @@ const changePassword = async (req, res) => {
       }
     );
 
-    res.status(201).send({ message: "Password just changed successfuly" });
+    res.status(201).send({ message: "Password Change successfully" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
 };
-//
+
 const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-  } catch (error) {}
+    const { _id } = req.user;
+    await userModel.deleteOne({ _id });
+    res.status(201).send({ message: "user deleted Successfully" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
 };
-//
+
+const getMe = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await userModel.findOne({ _id }, "-password");
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
 module.exports = {
   addUser,
   getUser,
@@ -83,4 +97,5 @@ module.exports = {
   updateUser,
   deleteUser,
   changePassword,
+  getMe,
 };
