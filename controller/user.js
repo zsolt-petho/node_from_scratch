@@ -1,10 +1,11 @@
 const { userSchema, validateUser, userModel } = require("../models/user");
 const hash = require("../utils/hash");
+const { passwordComplexity } = require("../utils/");
 //
 //
 const getUser = async (req, res) => {
   try {
-    const users = await userModel.find();
+    const users = await userModel.find({}, "-password");
     res.status(200).send(users);
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -34,7 +35,7 @@ const addUser = async (req, res) => {
 
     const { password, ...resData } = user.toObject();
 
-    res.status(201).send({ token });
+    res.status(201).send({ resData });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -43,6 +44,30 @@ const addUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
   } catch (error) {}
+};
+//
+const changePassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const { error } = passwordComplexity.validate(password);
+
+    if (error) return res.status(400).send({ message: error.message });
+
+    const hashedPassword = await hash(password);
+
+    const user = await userModel.updateOne(
+      { email: email },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+
+    res.status(201).send({ message: "Password just changed successfuly" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
 };
 //
 const deleteUser = async (req, res) => {
@@ -57,4 +82,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  changePassword,
 };
